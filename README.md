@@ -1,6 +1,6 @@
 # Falsecho – Advanced Phishing Tool
 
-Falsecho is an advanced phishing tool built for red team operations. It captures browser-based data such as webcam, microphone, clipboard content, and geolocation. It supports Progressive Web App (PWA) behavior, customizable phishing templates for credential harvesting, and realistic login page emulation. All interactions are tracked securely over HTTPS, enabling precise behavioral and consent-based testing.
+It captures data such as webcam, microphone, clipboard content, and geolocation. It supports Progressive Web App (PWA) behavior, customizable phishing templates for credential harvesting, and realistic login page emulation. All interactions are tracked securely over HTTPS, enabling precise behavioral and consent-based testing.
 
 > ⚠️ This tool is intended for **educational**, **research**, and **authorized security testing** purposes only. Unauthorized usage is strictly prohibited.
 
